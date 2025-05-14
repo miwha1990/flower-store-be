@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Flower" ALTER COLUMN "amount" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "type" DROP NOT NULL,
+ALTER COLUMN "type" DROP DEFAULT;

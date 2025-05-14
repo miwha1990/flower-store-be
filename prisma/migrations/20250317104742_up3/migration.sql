@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Flower" ADD COLUMN     "amount" DOUBLE PRECISION NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "type" TEXT NOT NULL DEFAULT 'user';
