@@ -1,10 +1,12 @@
+import { UserType } from '@prisma/client';
+
 export class CurrentUser {
   id: string;
   createdAt: Date;
   updatedAt: Date;
   name: string;
   email: string;
-  type: string;
+  type: UserType | null;
   constructor(partial: Partial<CurrentUser>) {
     this.createdAt = partial.createdAt;
     this.updatedAt = partial.updatedAt;
@@ -19,11 +21,11 @@ export class NewUser extends CurrentUser {
   password: string;
   constructor(partial: Partial<NewUser>) {
     super(partial);
-    this.password =  partial.password;
+    this.password = partial.password;
   }
 }
 
 export class AuthEntity {
   accessToken: string;
-  user: CurrentUser
+  user: CurrentUser;
 }

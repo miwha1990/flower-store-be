@@ -15,13 +15,38 @@ export class FlowersService {
 
   create(dto: CreateFlowersDto) {
     return this.prisma.flower.create({
-      data: dto,
+      data: {
+        ...dto,
+        item: {
+          create: {
+            name: dto.name,
+            price: dto.price,
+            type: 'FLOWER',
+          },
+        },
+      },
     });
   }
+
   update(dto: UpdateFlowersDto, id: number) {
+    const { name, price, ...flowerData } = dto;
+    const data = {
+      ...flowerData,
+      ...(name !== undefined || price !== undefined
+        ? {
+            item: {
+              update: {
+                ...(name !== undefined && { name }),
+                ...(price !== undefined && { price }),
+              },
+            },
+          }
+        : {}),
+    };
+
     return this.prisma.flower.update({
       where: { id },
-      data: dto,
+      data,
     });
   }
 

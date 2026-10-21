@@ -8,25 +8,73 @@ datasource db {
 }
 
 model Flower {
-  id    Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-  color String
-  name  String
-  price Float
+  color    String
+  name     String
+  price    Float
   imageSrc String?
-  amount Float
-  
+  amount   Float
+  itemId   Int         @unique
+  item     CatalogItem @relation(fields: [itemId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-  type     String?
+enum ItemType {
+  FLOWER
+  SUPPLEMENT
+  DELIVERY
+}
 
+model CatalogItem {
+  id         Int         @id @default(autoincrement())
+  type       ItemType
+  name       String
+  price      Decimal     @db.Decimal(10, 2)
+  flower     Flower?
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  itemId    Int
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+
+  order Order       @relation(fields: [orderId], references: [id])
+  item  CatalogItem @relation(fields: [itemId], references: [id])
+
+  @@unique([orderId, itemId])
+}
+
+model Order {
+  id      Int         @id @default(autoincrement())
+  userId  String?
+  user    User?       @relation(fields: [userId], references: [id])
+  items   OrderItem[]
+  status  String
+  details String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserType {
+  ADMIN
+  USER
+}
+
+model User {
+  id       String    @id @default(uuid())
+  name     String
+  email    String    @unique
+  password String
+  type     UserType?
+
+  orders    Order[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
