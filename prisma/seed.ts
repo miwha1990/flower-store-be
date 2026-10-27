@@ -5,24 +5,25 @@ const prisma = new PrismaClient();
 const roundsOfHashing = 10;
 
 async function main() {
-  const password = await hash('password123', roundsOfHashing);
-  await prisma.user.upsert({
-    where: { email: 'admin@admin.com' },
-    update: {
-      password: password,
-    },
-    create: {
-      email: 'admin@admin.com',
-      name: 'Admin',
-      type: 'ADMIN',
-      password,
-    },
-  });
+	const password = await hash('password123', roundsOfHashing);
+	await prisma.user.upsert({
+		where: { email: 'admin@admin.com' },
+		update: {
+			password: password,
+		},
+		create: {
+			email: 'admin@admin.com',
+			name: 'Admin',
+			phone: '1234567890',
+			type: 'ADMIN',
+			password,
+		},
+	});
 }
 main()
-  .then(() => prisma.$disconnect())
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+	.then(() => prisma.$disconnect())
+	.catch(async (e) => {
+		console.error(e);
+		await prisma.$disconnect();
+		process.exit(1);
+	});

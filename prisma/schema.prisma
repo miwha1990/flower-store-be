@@ -44,7 +44,7 @@ model OrderItem {
   quantity  Int
   unitPrice Decimal @db.Decimal(10, 2)
 
-  order Order       @relation(fields: [orderId], references: [id])
+  order Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
   item  CatalogItem @relation(fields: [itemId], references: [id])
 
   @@unique([orderId, itemId])
@@ -72,6 +72,7 @@ model User {
   name     String
   email    String    @unique
   password String
+  phone    Int?
   type     UserType?
 
   orders    Order[]
