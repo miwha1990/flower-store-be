@@ -10,16 +10,24 @@ datasource db {
 model Flower {
   id Int @id @default(autoincrement())
 
-  color    String
-  name     String
-  price    Float
-  imageSrc String?
-  amount   Float
-  itemId   Int         @unique
-  item     CatalogItem @relation(fields: [itemId], references: [id])
+  categoryId Int?
+  category   Category?   @relation(fields: [categoryId], references: [id])
+  color      String
+  name       String
+  price      Float
+  imageSrc   String?
+  amount     Float
+  itemId     Int         @unique
+  item       CatalogItem @relation(fields: [itemId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  flowers  Flower[]
 }
 
 enum ItemType {

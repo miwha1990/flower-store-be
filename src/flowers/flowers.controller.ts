@@ -1,17 +1,17 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  FileTypeValidator,
-  Get,
-  MaxFileSizeValidator,
-  Param,
-  ParseFilePipe,
-  Patch,
-  Post,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
+	Body,
+	Controller,
+	Delete,
+	FileTypeValidator,
+	Get,
+	MaxFileSizeValidator,
+	Param,
+	ParseFilePipe,
+	Patch,
+	Post,
+	UploadedFile,
+	UseGuards,
+	UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -31,6 +31,16 @@ export class FlowersController {
 	@Get()
 	findAll() {
 		return this.flowersService.findAll();
+	}
+
+	@Get('with-filters')
+	findAllWithFilters() {
+		return this.flowersService.findAllWithFilters();
+	}
+
+	@Get('categories')
+	findAllCatetegories() {
+		return this.flowersService.findCategories();
 	}
 
 	@Post()
