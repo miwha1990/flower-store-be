@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateFlowersDto } from './dto/create-flowers.dto';
+import { FlowersFilterDto } from './dto/flowers-filter.dto';
 import { UpdateFlowersDto } from './dto/update-flowers.dto';
 
 @Injectable()
@@ -13,9 +14,22 @@ export class FlowersService {
 		});
 	}
 
-	async findAllWithFilters() {
+	async findAllWithFilters(filters: FlowersFilterDto) {
+		const { color, category, minPrice, maxPrice } = filters;
 		const [items, colors, priceRange, categories] = await Promise.all([
 			this.prisma.flower.findMany({
+				where: {
+					...(color?.length && { color: { in: color } }),
+					...(category?.length && {
+						category: { name: { in: category } },
+					}),
+					...((minPrice !== undefined || maxPrice !== undefined) && {
+						price: {
+							...(minPrice !== undefined && { gte: minPrice }),
+							...(maxPrice !== undefined && { lte: maxPrice }),
+						},
+					}),
+				},
 				include: {
 					category: {
 						select: { id: true, name: true },

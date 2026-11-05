@@ -9,14 +9,17 @@ import {
 	ParseFilePipe,
 	Patch,
 	Post,
+	Query,
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
+	ValidationPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UploadService } from 'src/upload/upload.service';
 import { CreateFlowersDto } from './dto/create-flowers.dto';
+import { FlowersFilterDto } from './dto/flowers-filter.dto';
 import { UpdateFlowersDto } from './dto/update-flowers.dto';
 import { FlowersService } from './flowers.service';
 
@@ -34,8 +37,10 @@ export class FlowersController {
 	}
 
 	@Get('with-filters')
-	findAllWithFilters() {
-		return this.flowersService.findAllWithFilters();
+	findAllWithFilters(
+		@Query(new ValidationPipe({ transform: true })) filters: FlowersFilterDto,
+	) {
+		return this.flowersService.findAllWithFilters(filters);
 	}
 
 	@Get('categories')
